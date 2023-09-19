@@ -38,7 +38,7 @@ public class KakaoUser {
         member.setNickname(nickName);
         member.setEmail(email);
         return member;
-        //haha
+        //
     }
 
 }
