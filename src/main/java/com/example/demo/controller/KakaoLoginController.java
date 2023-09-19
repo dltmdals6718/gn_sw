@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-//test-ssh
 @Controller
 @RequiredArgsConstructor
 public class KakaoLoginController {
