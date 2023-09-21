@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>Counsel List</title>
+  <link rel="stylesheet" href="/css/counsels.css">
+</head>
+<body class="home1"> <!-- 여행 웹사이트와 동일한 클래스를 적용합니다 -->
+<h1>Counsel List</h1>
+<table class="col-sm-4">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Email</th>
+    <th>Context</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="counsel : ${counsels}">
+    <td th:text="${counsel.id}"></td>
+    <td th:text="${counsel.email}"></td>
+    <td th:text="${counsel.context}"></td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>

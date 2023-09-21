@@ -315,7 +315,7 @@
                             </p>
                         </div>
                         <div class="col-sm-3 text-center text-sm-right">
-                            <button class="btn btn-light rounded">예약 하러가기!</button>
+                            <button class="btn btn-light rounded" id="gotoSpotButton">장소 보러가기!</button>
                         </div>
                     </div>
                 </div>
@@ -490,4 +490,12 @@
 </footer>
 <!-- End of page footer -->
 </body>
+
+<script>
+    document.getElementById("gotoSpotButton").addEventListener("click", function() {
+        window.location.href = "/spot"; // "/spot" 경로로 변경
+    });
+</script>
+
+
 </html>
