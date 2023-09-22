@@ -4,6 +4,8 @@ import com.example.demo.DTO.CounselForm;
 import com.example.demo.domain.Counsel;
 import com.example.demo.repository.CounselRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,4 +39,13 @@ public class CounselService {
     counselRepository.save(counsel);
     return counsel.getId();   //em.persist 아직 db에 들어간 시점이 아니라도 값을 넣어줌
   }
+
+  public Page<Counsel> pageList(Pageable pageable) {
+    return counselRepository.findAll(pageable);
+  }
+
+  public Long getTotalCounselsCount() {
+    return counselRepository.count(); // 현재 등록된 전체 문의글 수를 가져옴
+  }
+
 }

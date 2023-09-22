@@ -1,27 +1,57 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="utf-8">
-  <title>Counsel List</title>
+  <meta charset="UTF-8">
   <link rel="stylesheet" href="/css/counsels.css">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상담 게시판</title>
 </head>
-<body class="home1"> <!-- 여행 웹사이트와 동일한 클래스를 적용합니다 -->
-<h1>Counsel List</h1>
-<table class="col-sm-4">
+
+<body>
+<h2> 문의글 목록 </h2>
+
+<hr class="hr1" noshade>
+
+<form>
+  <span> ▷ 총 [[${totalCounsels}]]개의 문의글이 있습니다. </span>
+  <div>
+  </div>
+  <button class="rightBt"> 검색 </button>
+  <input type="text" class="rightId">
+  <span class="right"> Id를 입력하세요 ▷ </span>
+  </span>
+</form>
+
+<br>
+<table>
   <thead>
   <tr>
-    <th>ID</th>
-    <th>Email</th>
-    <th>Context</th>
+    <th scope="col" class="th-num">ID</th>
+    <th scope="col" class="th-title">Email</th>
+    <th scope="col" class="th-date">Context</th>
   </tr>
   </thead>
   <tbody>
-  <tr th:each="counsel : ${counsels}">
+  <tr th:each="counsel : ${counsels}" class="center">
     <td th:text="${counsel.id}"></td>
     <td th:text="${counsel.email}"></td>
     <td th:text="${counsel.context}"></td>
   </tr>
   </tbody>
 </table>
+
+<div class="pagination-container">
+  <button type="button" th:if="${hasPrevious}" th:onclick="|location.href='@{/counsels(page=${previous})}'|">이전</button>
+  <th:block th:unless="${counselSize}" th:each="num : ${#numbers.sequence(startPage, endPage)}">
+    <a th:text="${num}" th:href="@{/counsels(page=${num-1})}"></a>
+  </th:block>
+  <button type="button" th:if="${hasNext}" th:onclick="|location.href='@{/counsels(page=${next})}'|">다음</button>
+</div>
+
+<span class="right">
+    <input type="button" value="목록" class="greylist">
+    <input type="button" value="글쓰기" class="gradient">
+</span>
 </body>
 </html>
