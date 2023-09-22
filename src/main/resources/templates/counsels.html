@@ -13,17 +13,16 @@
 
 <hr class="hr1" noshade>
 
-<form>
-  <span> ▷ 총 [[${totalCounsels}]]개의 문의글이 있습니다. </span>
-  <div>
-  </div>
-  <button class="rightBt"> 검색 </button>
+<span> ▷ 총 [[${totalCounsels}]]개의 문의글이 있습니다. </span>
+<form action="/counsels" method="get">
+  <div></div>
+  <button type="submit" class="rightBt"> 검색 </button>
   <label>
-    <input type="text" class="rightId">
+    <input type="text" class="rightEmail" name="searchEmail">
   </label>
-  <span class="right"> Id를 입력하세요 ▷ </span>
-  </span>
+  <span class="right"> 이메일을 입력하세요 ▷ </span>
 </form>
+
 
 <br>
 <table>
@@ -44,12 +43,17 @@
 </table>
 
 <div class="pagination-container">
-  <button type="button" th:if="${hasPrevious}" th:onclick="|location.href='@{/counsels(page=${previous})}'|">이전</button>
+  <!-- 이전 페이지로 이동하는 버튼 -->
+  <button type="button" th:if="${hasPrevious}" th:onclick="|location.href='@{/counsels(page=${previous}, searchEmail=${param.searchEmail})}'|">이전</button>
+
+  <!-- 페이지 번호 링크 -->
   <th:block th:unless="${counselSize}" th:each="num : ${#numbers.sequence(startPage, endPage)}">
-    <a th:text="${num}" th:href="@{/counsels(page=${ num - 1 })}"></a>
+    <a class="page-link" th:if="${param.searchEmail != null}" th:text="${num}" th:href="@{/counsels(page=${num}-1, searchEmail=${param.searchEmail})}"></a>
+    <a class="page-link" th:if="${param.searchEmail == null}" th:text="${num}" th:href="@{/counsels(page=${num}-1)}"></a>
   </th:block>
 
-  <button type="button" th:if="${hasNext}" th:onclick="|location.href='@{/counsels(page=${next})}'|">다음</button>
+  <!-- 다음 페이지로 이동하는 버튼 -->
+  <button type="button" th:if="${hasNext}" th:onclick="|location.href='@{/counsels(page=${next}, searchEmail=${param.searchEmail})}'|">다음</button>
 </div>
 
 <span class="right">

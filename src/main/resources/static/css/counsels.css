@@ -69,14 +69,14 @@ th, td {
     color: #ffffff; /* 마우스가 버튼 위로 올라갈 때 글자 색상을 흰색으로 변경합니다. */
 }
 
-.rightId {
+.rightEmail {
     float: right;
     background-color: #ffffff; /* 배경색을 파란색으로 설정합니다. */
     border: 2px solid #5a879a; /* 두께가 있는 파란색 테두리를 추가합니다. */
     color: #000000; /* 글자 색상을 검은색으로 설정합니다. 또는 원하는 색상으로 변경하세요. */
     padding: 10px; /* 여백을 크게 설정합니다. */
     margin: 10px; /* 요소 주위에 여백을 추가합니다. */
-    width: 50px; /* 가로 너비. */
+    width: 160px; /* 가로 너비. */
     border-radius: 10px; /* 둥글게 모양을 변경합니다. */
 }
 

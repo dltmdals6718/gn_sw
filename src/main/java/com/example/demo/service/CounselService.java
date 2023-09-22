@@ -48,4 +48,12 @@ public class CounselService {
     return counselRepository.count(); // 현재 등록된 전체 문의글 수를 가져옴
   }
 
+  public Page<Counsel> searchPageList(String email, Pageable pageable) {
+    return counselRepository.findByEmailContaining(email, pageable);
+  }
+
+  public Long getTotalCounselsCountByEmail(String searchEmail) {
+    return counselRepository.countByEmail(searchEmail);
+  }
+
 }

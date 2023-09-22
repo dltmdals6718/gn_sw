@@ -35,17 +35,30 @@ public class CounselController {
   }
 
   @GetMapping("/counsels")
-  public String showAllCounsels(Model model, @PageableDefault(sort = "id", value = 9) Pageable pageable){
+  public String showAllCounsels(Model model, @PageableDefault(sort = "id", value = 4) Pageable pageable,
+                                @RequestParam(required = false) String searchEmail) {
 
     // 총 문의글 수를 모델에 추가
-    Long totalCounsels = counselService.getTotalCounselsCount();
+    Long totalCounsels;
+
+    if (searchEmail == null) {
+      totalCounsels = counselService.getTotalCounselsCount();
+    } else {
+      totalCounsels = counselService.getTotalCounselsCountByEmail(searchEmail);
+    }
+
     model.addAttribute("totalCounsels", totalCounsels);
 
+    Page<Counsel> pageList;
 
-    Page<Counsel> pageList = counselService.pageList(pageable);
+    if (searchEmail == null) {
+      pageList = counselService.pageList(pageable);
+    } else {
+      pageList = counselService.searchPageList(searchEmail, pageable);
+    }
 
     model.addAttribute("counsels", pageList);
-    model.addAttribute("counselSize", pageList.isEmpty()); // 데이터가 비었는지 체크용
+    model.addAttribute("counselSize", pageList.isEmpty());
 
     /* 이전 및 다음 페이지 넘버 가져옴 */
     model.addAttribute("previous", pageable.previousOrFirst().getPageNumber());
@@ -56,16 +69,17 @@ public class CounselController {
     model.addAttribute("hasPrevious", pageList.hasPrevious());
 
     /* 페이지 이동 링크 */
-    int endPage = (int)(Math.ceil((pageable.getPageNumber()+1)/10.0)*10); // 10, 20, 30, ...
-    int startPage = endPage-9; // 10개씩 보여주기 -1 = 9
-    if(endPage>pageList.getTotalPages())
-      endPage=pageList.getTotalPages();
+    int endPage = (int) (Math.ceil((pageable.getPageNumber() + 1) / 10.0) * 10); // 10, 20, 30, ...
+    int startPage = endPage - 9; // 10개씩 보여주기 -1 = 9
+    if (endPage > pageList.getTotalPages())
+      endPage = pageList.getTotalPages();
 
     model.addAttribute("endPage", endPage);
     model.addAttribute("startPage", startPage);
 
     return "counsels";
   }
+
 
   @GetMapping("/home")
   public String home(Model model) {
