@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="">
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="/css/counsels.css">
@@ -18,7 +18,9 @@
   <div>
   </div>
   <button class="rightBt"> 검색 </button>
-  <input type="text" class="rightId">
+  <label>
+    <input type="text" class="rightId">
+  </label>
   <span class="right"> Id를 입력하세요 ▷ </span>
   </span>
 </form>
@@ -44,8 +46,9 @@
 <div class="pagination-container">
   <button type="button" th:if="${hasPrevious}" th:onclick="|location.href='@{/counsels(page=${previous})}'|">이전</button>
   <th:block th:unless="${counselSize}" th:each="num : ${#numbers.sequence(startPage, endPage)}">
-    <a th:text="${num}" th:href="@{/counsels(page=${num-1})}"></a>
+    <a th:text="${num}" th:href="@{/counsels(page=${ num - 1 })}"></a>
   </th:block>
+
   <button type="button" th:if="${hasNext}" th:onclick="|location.href='@{/counsels(page=${next})}'|">다음</button>
 </div>
 

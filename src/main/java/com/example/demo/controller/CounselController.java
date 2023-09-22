@@ -35,7 +35,7 @@ public class CounselController {
   }
 
   @GetMapping("/counsels")
-  public String showAllCounsels(Model model, @PageableDefault(sort = "id", value = 5) Pageable pageable){
+  public String showAllCounsels(Model model, @PageableDefault(sort = "id", value = 9) Pageable pageable){
 
     // 총 문의글 수를 모델에 추가
     Long totalCounsels = counselService.getTotalCounselsCount();
