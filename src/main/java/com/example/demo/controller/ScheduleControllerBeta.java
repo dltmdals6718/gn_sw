@@ -22,9 +22,7 @@ public class ScheduleControllerBeta {
     }
 
     @GetMapping("/schedule")
-    public String scheduleForm(@RequestParam LocalDate startDate, @RequestParam LocalDate endDate, Model model) {
-        model.addAttribute("startDate", startDate);
-        model.addAttribute("endDate", endDate);
+    public String scheduleForm(Model model) {
         return "makeScheduleBeta";
     }
 
