@@ -236,11 +236,18 @@
 
 
     function save() {
+        let inputTexts = document.querySelectorAll('input[name="memo"]');
+        let memos = [];
+        inputTexts.forEach(function (text) {
+            memos.push(text.value);
+        })
+
+        console.log(JSON.stringify(memos));
         console.log(JSON.stringify(selectPlaces));
         $.ajax({
             type: "POST",
             url: "/schedule",
-            data: JSON.stringify(selectPlaces),
+            data: JSON.stringify({"content": selectPlaces, "memos": memos}),
             contentType: "application/json",
             success: function (data) {
                 console.log("전송 완료");
@@ -491,12 +498,13 @@
         })
         btn.innerText = "삭제";
 
-        let setTime = document.createElement('input');
-        setTime.setAttribute("type", "time");
+        let setMemo = document.createElement('input');
+        setMemo.setAttribute("type", "text");
+        setMemo.setAttribute("name", "memo");
 
         console.log(place);
         li.appendChild(btn);
-        li.appendChild(setTime);
+        li.appendChild(setMemo);
         ul.appendChild(li);
         const newDate = new Date(startDate);
         newDate.setDate(startDate.getDate()+curNav); // getDate(): 일자 반환, curNav더해서 넘어가는 일자는 이전 달의 최대 일을 빼서 다음 달로 넘어감

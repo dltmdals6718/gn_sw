@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.DTO.ScheduleDTO;
 import com.example.demo.domain.Plan;
 import com.example.demo.domain.SpotDTO;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -28,10 +29,10 @@ public class ScheduleControllerBeta {
     }
 
     @PostMapping("/schedule")
-    public String makeSchedule(@RequestBody List<SpotDTO> content) {
-        for (SpotDTO spotDTO : content) {
-            System.out.println("spotDTO = " + spotDTO);
-        }
+    public String makeSchedule(@RequestBody ScheduleDTO schedule) {
+        List<SpotDTO> content = schedule.getContent();
+        List<String> memos = schedule.getMemos();
+        System.out.println("schedule = " + schedule);
         return "redirect:/";
     }
 }
