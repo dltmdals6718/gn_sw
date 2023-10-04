@@ -80,10 +80,9 @@ public class CounselController {
     return "counsels";
   }
 
-
   @GetMapping("/home")
   public String home(Model model) {
     // 여기에 모델에 데이터를 추가하거나 다른 로직을 추가할 수 있습니다.
-    return "home"; // "home.html" 템플릿을 찾아 렌더링합니다.
+    return "home"; // "home.html" 템플릿을 찾아 렌더링
   }
 }
