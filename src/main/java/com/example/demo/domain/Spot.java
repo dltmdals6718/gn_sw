@@ -11,17 +11,18 @@ import java.util.List;
 @Getter
 @Setter
 public class Spot {
-    @Id @GeneratedValue
-    @Column(name = "SPOT_ID")
-    private Long id;
 
+  @Id @GeneratedValue
+  @Column(name = "SPOT_ID")
+  private Long id;
 
-    private String spotName;
-    private String address;
-    private String description;
+  private String spotName;
+  private String address;
+  private String description;
 
-    @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SpotComment> spotComments = new ArrayList<>();
+  @OneToMany(mappedBy = "spot", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<SpotComment> spotComments = new ArrayList<>();
+
 
 
 
