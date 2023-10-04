@@ -33,8 +33,12 @@
             height: 700px;
         }
 
-        #date-range {
-            width: 100px;
+        #show-calendar-button {
+            width: 100px; /* 버튼의 너비 조절 */
+        }
+
+        #selected-dates div {
+            margin-bottom: 10px;
         }
         </style>
 
@@ -212,37 +216,35 @@
 <!--    로그아웃-->
 <!--</button>-->
 
-<main class = "row">
-    <div id="tab-container" class="col-xl-1">
-        <div id="tab-content">
-            <input type="text" id="date-range" placeholder="날짜 선택">
-            <button id="show-calendar-button">달력 표시</button>
-            <div id="selected-dates"></div>
-        </div>
-
-    </div>
-
-    <div id="select_list" class="col-xl-2">
-        선택 리스트
-    </div>
-
-    <div id="menu_wrap" class="bg_white col-xl-2">
-        <div class="option">
-            <div>
-                <form onsubmit="searchPlaces(); return false;">
-                    키워드 : <input type="text" value="창원대학교" id="keyword" size="15">
-                    <button type="submit">검색하기</button>
-                </form>
+    <main class = "row">
+        <div id="tab-container" class="col-xl-1">
+            <div id="tab-content">
+                <button id="show-calendar-button">달력 표시</button>
+                <div id="selected-dates"></div>
             </div>
         </div>
-        <hr>
-        <ul id="placesList"></ul>
-        <div id="pagination"></div>
-    </div>
 
-    <div class = "map_wrap col-lg-7">
-        <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
-    </div>
+        <div id="select_list" class="col-xl-2">
+            선택 리스트
+        </div>
+
+        <div id="menu_wrap" class="bg_white col-xl-2">
+            <div class="option">
+                <div>
+                    <form onsubmit="searchPlaces(); return false;">
+                        키워드 : <input type="text" value="창원대학교" id="keyword" size="15">
+                        <button type="submit">검색하기</button>
+                    </form>
+                </div>
+            </div>
+            <hr>
+            <ul id="placesList"></ul>
+            <div id="pagination"></div>
+        </div>
+
+        <div class = "map_wrap col-lg-7">
+            <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
+        </div>
 </main>
 
 
@@ -256,27 +258,40 @@
     $(document).ready(function () {
         let startDate, endDate; // 시작 날짜와 종료 날짜를 저장할 변수
 
-        // daterangepicker 초기화
-        $('#date-range').daterangepicker({
-            autoUpdateInput: false, // 수동으로 날짜 업데이트
-            locale: {
-                cancelLabel: '취소',
-                applyLabel: '적용',
-                format: 'YYYY-MM-DD', // 날짜 형식 지정
-            },
+        // moment.js에서 한국어 로케일 설정
+        moment.locale('ko', {
+            weekdays: ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'],
+            weekdaysShort: ['일', '월', '화', '수', '목', '금', '토'],
+            months: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+            monthsShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
         });
 
-        // 날짜 범위 선택 시 입력 필드에 날짜 설정
-        $('#date-range').on('apply.daterangepicker', function (ev, picker) {
-            startDate = picker.startDate.format('YYYY-MM-DD');
-            endDate = picker.endDate.format('YYYY-MM-DD');
-            $(this).val(startDate + ' - ' + endDate);
-            showSelectedDates(startDate, endDate);
-        });
-
-        // 버튼 클릭 시 달력 표시/숨김 토글
+        // '달력 표시' 버튼 클릭 시 달력을 표시
         $('#show-calendar-button').on('click', function () {
-            $('#date-range').data('daterangepicker').toggle();
+            $('#show-calendar-button').daterangepicker({
+                autoUpdateInput: false, // 수동으로 날짜 업데이트
+                locale: {
+                    cancelLabel: '취소',
+                    applyLabel: '적용',
+                    format: 'YYYY-MM-DD', // 날짜 형식 지정
+                },
+            });
+
+            // 달력이 표시될 때 적용 버튼 클릭 시 이벤트
+            $('#show-calendar-button').on('apply.daterangepicker', function (ev, picker) {
+                startDate = picker.startDate.format('YYYY-MM-DD');
+                endDate = picker.endDate.format('YYYY-MM-DD');
+                $('#show-calendar-button').val(startDate + ' - ' + endDate);
+                showSelectedDates(startDate, endDate);
+            });
+
+            // 달력이 표시될 때 취소 버튼 클릭 시 이벤트
+            $('#show-calendar-button').on('cancel.daterangepicker', function (ev, picker) {
+                // 취소 버튼을 누르면 달력이 닫힙니다.
+            });
+
+            // 달력 표시
+            $('#show-calendar-button').data('daterangepicker').show();
         });
 
         function showSelectedDates(start, end) {
@@ -284,9 +299,12 @@
             selectedDatesContainer.innerHTML = ''; // 이전에 선택한 날짜를 지웁니다.
 
             const currentDate = new Date(start);
-            while (currentDate <= new Date(end)) {
+            const endDateObj = new Date(end);
+
+            while (currentDate <= endDateObj) {
+                const formattedDate = moment(currentDate).format('MM월 DD일 dddd');
                 const dateElement = document.createElement('div');
-                dateElement.textContent = currentDate.toDateString();
+                dateElement.textContent = formattedDate;
                 selectedDatesContainer.appendChild(dateElement);
                 currentDate.setDate(currentDate.getDate() + 1); // 다음 날짜로 이동
             }
