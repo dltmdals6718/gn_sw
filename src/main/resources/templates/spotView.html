@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Spot List</title>
+</head>
+<body>
+<h1>Spot List</h1>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Address</th>
+        <!-- 추가적인 필드들을 여기에 추가하세요 -->
+    </tr>
+    <tr th:each="spot : ${spots}">
+        <td th:text="${spot.id}"></td>
+        <td th:text="${spot.spotName}"></td>
+        <td th:text="${spot.address}"></td>
+        <!-- 추가적인 필드들을 여기에 추가하세요 -->
+    </tr>
+</table>
+</body>
+</html>
