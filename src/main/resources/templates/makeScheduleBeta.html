@@ -3,6 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- moment.js (date manipulation library) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+    <!-- daterangepicker library -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
     <style>
         .map_wrap, .map_wrap * {
             margin: 0;
@@ -18,222 +30,307 @@
 
         .map_wrap {
             position: relative;
-            width: 100%;
-            height: 500px;
+            height: 700px;
         }
 
-        #menu_wrap {
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            width: 250px;
-            margin: 10px 0 30px 10px;
-            padding: 5px;
-            overflow-y: auto;
-            background: rgba(255, 255, 255, 0.7);
-            z-index: 1;
-            font-size: 12px;
-            border-radius: 10px;
+        #show-calendar-button {
+            width: 100px; /* 버튼의 너비 조절 */
         }
 
-        .bg_white {
-            background: #fff;
+        #selected-dates div {
+            margin-bottom: 10px;
         }
+        </style>
 
-        #menu_wrap hr {
-            display: block;
-            height: 1px;
-            border: 0;
-            border-top: 2px solid #5F5F5F;
-            margin: 3px 0;
-        }
+<!--        #menu_wrap {-->
+<!--            position: absolute;-->
+<!--            top: 0;-->
+<!--            left: 0;-->
+<!--            bottom: 0;-->
+<!--            width: 250px;-->
+<!--            margin: 10px 0 30px 10px;-->
+<!--            padding: 5px;-->
+<!--            overflow-y: auto;-->
+<!--            background: rgba(255, 255, 255, 0.7);-->
+<!--            z-index: 1;-->
+<!--            font-size: 12px;-->
+<!--            border-radius: 10px;-->
+<!--        }-->
 
-        #menu_wrap .option {
-            text-align: center;
-        }
+<!--        .bg_white {-->
+<!--            background: #fff;-->
+<!--        }-->
 
-        #menu_wrap .option p {
-            margin: 10px 0;
-        }
+<!--        #menu_wrap hr {-->
+<!--            display: block;-->
+<!--            height: 1px;-->
+<!--            border: 0;-->
+<!--            border-top: 2px solid #5F5F5F;-->
+<!--            margin: 3px 0;-->
+<!--        }-->
 
-        #menu_wrap .option button {
-            margin-left: 5px;
-        }
+<!--        #menu_wrap .option {-->
+<!--            text-align: center;-->
+<!--        }-->
 
-        #placesList li {
-            list-style: none;
-        }
+<!--        #menu_wrap .option p {-->
+<!--            margin: 10px 0;-->
+<!--        }-->
 
-        #placesList .item {
-            position: relative;
-            border-bottom: 1px solid #888;
-            overflow: hidden;
-            cursor: pointer;
-            min-height: 65px;
-        }
+<!--        #menu_wrap .option button {-->
+<!--            margin-left: 5px;-->
+<!--        }-->
 
-        #placesList .item span {
-            display: block;
-            margin-top: 4px;
-        }
+<!--        #placesList li {-->
+<!--            list-style: none;-->
+<!--        }-->
 
-        #placesList .item h5, #placesList .item .info {
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-        }
+<!--        #placesList .item {-->
+<!--            position: relative;-->
+<!--            border-bottom: 1px solid #888;-->
+<!--            overflow: hidden;-->
+<!--            cursor: pointer;-->
+<!--            min-height: 65px;-->
+<!--        }-->
 
-        #placesList .item .info {
-            padding: 10px 0 10px 55px;
-        }
+<!--        #placesList .item span {-->
+<!--            display: block;-->
+<!--            margin-top: 4px;-->
+<!--        }-->
 
-        #placesList .info .gray {
-            color: #8a8a8a;
-        }
+<!--        #placesList .item h5, #placesList .item .info {-->
+<!--            text-overflow: ellipsis;-->
+<!--            overflow: hidden;-->
+<!--            white-space: nowrap;-->
+<!--        }-->
 
-        #placesList .info .jibun {
-            padding-left: 26px;
-            background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png) no-repeat;
-        }
+<!--        #placesList .item .info {-->
+<!--            padding: 10px 0 10px 55px;-->
+<!--        }-->
 
-        #placesList .info .tel {
-            color: #009900;
-        }
+<!--        #placesList .info .gray {-->
+<!--            color: #8a8a8a;-->
+<!--        }-->
 
-        #placesList .item .markerbg {
-            float: left;
-            position: absolute;
-            width: 36px;
-            height: 37px;
-            margin: 10px 0 0 10px;
-            background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png) no-repeat;
-        }
+<!--        #placesList .info .jibun {-->
+<!--            padding-left: 26px;-->
+<!--            background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png) no-repeat;-->
+<!--        }-->
 
-        #placesList .item .marker_1 {
-            background-position: 0 -10px;
-        }
+<!--        #placesList .info .tel {-->
+<!--            color: #009900;-->
+<!--        }-->
 
-        #placesList .item .marker_2 {
-            background-position: 0 -56px;
-        }
+<!--        #placesList .item .markerbg {-->
+<!--            float: left;-->
+<!--            position: absolute;-->
+<!--            width: 36px;-->
+<!--            height: 37px;-->
+<!--            margin: 10px 0 0 10px;-->
+<!--            background: url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png) no-repeat;-->
+<!--        }-->
 
-        #placesList .item .marker_3 {
-            background-position: 0 -102px
-        }
+<!--        #placesList .item .marker_1 {-->
+<!--            background-position: 0 -10px;-->
+<!--        }-->
 
-        #placesList .item .marker_4 {
-            background-position: 0 -148px;
-        }
+<!--        #placesList .item .marker_2 {-->
+<!--            background-position: 0 -56px;-->
+<!--        }-->
 
-        #placesList .item .marker_5 {
-            background-position: 0 -194px;
-        }
+<!--        #placesList .item .marker_3 {-->
+<!--            background-position: 0 -102px-->
+<!--        }-->
 
-        #placesList .item .marker_6 {
-            background-position: 0 -240px;
-        }
+<!--        #placesList .item .marker_4 {-->
+<!--            background-position: 0 -148px;-->
+<!--        }-->
 
-        #placesList .item .marker_7 {
-            background-position: 0 -286px;
-        }
+<!--        #placesList .item .marker_5 {-->
+<!--            background-position: 0 -194px;-->
+<!--        }-->
 
-        #placesList .item .marker_8 {
-            background-position: 0 -332px;
-        }
+<!--        #placesList .item .marker_6 {-->
+<!--            background-position: 0 -240px;-->
+<!--        }-->
 
-        #placesList .item .marker_9 {
-            background-position: 0 -378px;
-        }
+<!--        #placesList .item .marker_7 {-->
+<!--            background-position: 0 -286px;-->
+<!--        }-->
 
-        #placesList .item .marker_10 {
-            background-position: 0 -423px;
-        }
+<!--        #placesList .item .marker_8 {-->
+<!--            background-position: 0 -332px;-->
+<!--        }-->
 
-        #placesList .item .marker_11 {
-            background-position: 0 -470px;
-        }
+<!--        #placesList .item .marker_9 {-->
+<!--            background-position: 0 -378px;-->
+<!--        }-->
 
-        #placesList .item .marker_12 {
-            background-position: 0 -516px;
-        }
+<!--        #placesList .item .marker_10 {-->
+<!--            background-position: 0 -423px;-->
+<!--        }-->
 
-        #placesList .item .marker_13 {
-            background-position: 0 -562px;
-        }
+<!--        #placesList .item .marker_11 {-->
+<!--            background-position: 0 -470px;-->
+<!--        }-->
 
-        #placesList .item .marker_14 {
-            background-position: 0 -608px;
-        }
+<!--        #placesList .item .marker_12 {-->
+<!--            background-position: 0 -516px;-->
+<!--        }-->
 
-        #placesList .item .marker_15 {
-            background-position: 0 -654px;
-        }
+<!--        #placesList .item .marker_13 {-->
+<!--            background-position: 0 -562px;-->
+<!--        }-->
 
-        #pagination {
-            margin: 10px auto;
-            text-align: center;
-        }
+<!--        #placesList .item .marker_14 {-->
+<!--            background-position: 0 -608px;-->
+<!--        }-->
 
-        #pagination a {
-            display: inline-block;
-            margin-right: 10px;
-        }
+<!--        #placesList .item .marker_15 {-->
+<!--            background-position: 0 -654px;-->
+<!--        }-->
 
-        #pagination .on {
-            font-weight: bold;
-            cursor: default;
-            color: #777;
-        }
+<!--        #pagination {-->
+<!--            margin: 10px auto;-->
+<!--            text-align: center;-->
+<!--        }-->
+
+<!--        #pagination a {-->
+<!--            display: inline-block;-->
+<!--            margin-right: 10px;-->
+<!--        }-->
+
+<!--        #pagination .on {-->
+<!--            font-weight: bold;-->
+<!--            cursor: default;-->
+<!--            color: #777;-->
+<!--        }-->
 
 
-    </style>
+<!--    </style>-->
 </head>
 <body>
 
-<button type="button"
-        onclick="location.href='https://kauth.kakao.com/oauth/logout?client_id=ced4991c0aeab040d5182416037bc9cc&logout_redirect_uri=http://localhost:8080/logout'">
-    로그아웃
-</button>
+<!--<button type="button"-->
+<!--        onclick="location.href='https://kauth.kakao.com/oauth/logout?client_id=ced4991c0aeab040d5182416037bc9cc&logout_redirect_uri=http://localhost:8080/logout'">-->
+<!--    로그아웃-->
+<!--</button>-->
 
-
-<div id="tab-container">
-</div>
-
-<button onclick="test()">최종 저장 목록</button>
-
-
-<div class="map_wrap">
-    <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
-    <div id="menu_wrap" class="bg_white">
-        <div class="option">
-            <div>
-                <form onsubmit="searchPlaces(); return false;">
-                    키워드 : <input type="text" value="이태원 맛집" id="keyword" size="15">
-                    <button type="submit">검색하기</button>
-                </form>
+    <main class = "row">
+        <div id="tab-container" class="col-xl-1">
+            <div id="tab-content">
+                <button id="show-calendar-button">달력 표시</button>
+                <div id="selected-dates"></div>
             </div>
         </div>
-        <hr>
-        <ul id="placesList"></ul>
-        <div id="pagination"></div>
-    </div>
-</div>
 
-<ul id="selectList">
-</ul>
+        <div id="select_list" class="col-xl-2">
+            선택 리스트
+        </div>
+
+        <div id="menu_wrap" class="bg_white col-xl-2">
+            <div class="option">
+                <div>
+                    <form onsubmit="searchPlaces(); return false;">
+                        키워드 : <input type="text" value="창원대학교" id="keyword" size="15">
+                        <button type="submit">검색하기</button>
+                    </form>
+                </div>
+            </div>
+            <hr>
+            <ul id="placesList"></ul>
+            <div id="pagination"></div>
+        </div>
+
+        <div class = "map_wrap col-lg-7">
+            <div id="map" style="width:100%;height:100%;position:relative;overflow:hidden;"></div>
+        </div>
+</main>
+
+
+<button onclick="save()">최종 저장</button>
+<button>취소</button>
 
 <script type="text/javascript"
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=07bd9c7fdccdc1c8c54b73e9953225bc&libraries=services"></script>
 
+<script>
+    $(document).ready(function () {
+        let startDate, endDate; // 시작 날짜와 종료 날짜를 저장할 변수
+
+        // moment.js에서 한국어 로케일 설정
+        moment.locale('ko', {
+            weekdays: ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'],
+            weekdaysShort: ['일', '월', '화', '수', '목', '금', '토'],
+            months: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+            monthsShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+        });
+
+        // '달력 표시' 버튼 클릭 시 달력을 표시
+        $('#show-calendar-button').on('click', function () {
+            $('#show-calendar-button').daterangepicker({
+                autoUpdateInput: false, // 수동으로 날짜 업데이트
+                locale: {
+                    cancelLabel: '취소',
+                    applyLabel: '적용',
+                    format: 'YYYY-MM-DD', // 날짜 형식 지정
+                },
+            });
+
+            // 달력이 표시될 때 적용 버튼 클릭 시 이벤트
+            $('#show-calendar-button').on('apply.daterangepicker', function (ev, picker) {
+                startDate = picker.startDate.format('YYYY-MM-DD');
+                endDate = picker.endDate.format('YYYY-MM-DD');
+                $('#show-calendar-button').val(startDate + ' - ' + endDate);
+                showSelectedDates(startDate, endDate);
+            });
+
+            // 달력이 표시될 때 취소 버튼 클릭 시 이벤트
+            $('#show-calendar-button').on('cancel.daterangepicker', function (ev, picker) {
+                // 취소 버튼을 누르면 달력이 닫힙니다.
+            });
+
+            // 달력 표시
+            $('#show-calendar-button').data('daterangepicker').show();
+        });
+
+        function showSelectedDates(start, end) {
+            const selectedDatesContainer = document.getElementById('selected-dates');
+            selectedDatesContainer.innerHTML = ''; // 이전에 선택한 날짜를 지웁니다.
+
+            const currentDate = new Date(start);
+            const endDateObj = new Date(end);
+
+            while (currentDate <= endDateObj) {
+                const formattedDate = moment(currentDate).format('MM월 DD일 dddd');
+                const dateElement = document.createElement('div');
+                dateElement.textContent = formattedDate;
+                selectedDatesContainer.appendChild(dateElement);
+                currentDate.setDate(currentDate.getDate() + 1); // 다음 날짜로 이동
+            }
+        }
+    });
+</script>
+
 <script th:inline="javascript">
-
-
-    function test() {
-        console.log(selectPlaces);
+    function save() {
+        console.log(JSON.stringify(selectPlaces));
+        $.ajax({
+            type: "POST",
+            url: "/schedule",
+            data: JSON.stringify(selectPlaces),
+            contentType: "application/json",
+            success: function (data) {
+                console.log("전송 완료");
+            },
+            error: function () {
+                console.log("전송 실패");
+            }
+        })
     }
 
     let selectPlaces = []; // 선택된 여행지
+    let sequence=0;
 
     // 마커를 담을 배열입니다
     var markers = [];
@@ -319,7 +416,6 @@
             btn.innerText = '+';
             btn.addEventListener('click', () => {
                 addPlace(places[i]);
-                //console.log(selectPlaces);
             })
             itemEl.appendChild(btn);
 
@@ -458,49 +554,74 @@
         }
     }
 
-    function addPlace(addPlace) {
+    function addPlace(place) {
+        const tabContentItem = document.querySelectorAll('.tab-content-item')[curNav];
+        const ul = tabContentItem.querySelector('ul');
 
-        selectPlaces.push(addPlace);
-
-        let sl = document.getElementById('selectList');
         let li = document.createElement('li');
-        li.innerText = addPlace.place_name;
+        li.innerText = place.place_name;
         let btn = document.createElement('button');
-        btn.innerText = "삭제";
-        li.appendChild(btn);
-        sl.appendChild(li);
+
+        let idx = ++sequence;
         btn.addEventListener('click', () => {
-            deleteButtonAndPatch();
+            deleteButtonAndPatch(idx);
+            li.remove();
+        })
+        btn.innerText = "삭제";
+
+        let setTime = document.createElement('input');
+        setTime.setAttribute("type", "time");
+
+        console.log(place);
+        li.appendChild(btn);
+        li.appendChild(setTime);
+        ul.appendChild(li);
+        const newDate = new Date(startDate);
+        newDate.setDate(startDate.getDate()+curNav); // getDate(): 일자 반환, curNav더해서 넘어가는 일자는 이전 달의 최대 일을 빼서 다음 달로 넘어감
+        selectPlaces.push({name:place.place_name, address:place.address_name, phone:place.phone, place_id:place.id, date: newDate, idx:idx});
+    }
+
+    function deleteButtonAndPatch(idx) {
+        console.log(idx);
+        selectPlaces.forEach((place, index) => {
+            if(place.idx==idx) {
+                console.log("삭제할 idx:"+idx+" 발견 index:"+index);
+                selectPlaces.splice(index, 1);
+            }
         })
     }
 
-    function deleteButtonAndPatch() {
-        const boxs = document.querySelectorAll("#selectList > li");
-        boxs.forEach((el, index) => {
-            el.onclick = () => {
-                el.remove();
-                selectPlaces.splice(index, 1);
-                //console.log(index,"번째를 삭제했습니다.");
-                //console.log(selectPlaces);
-            }
-        });
-    }
+    let curNav = 0;
 
     const startDate = new Date([[${startDate}]]);
     const endDate = new Date([[${endDate}]]);
     const tabContainer = document.getElementById('tab-container'); // 탭이 들어갈 컨테이너 요소
+    const tabContent = document.getElementById('tab-content');
+    const tabNav = document.getElementById('tab-nav');
 
-    for (let date = startDate; date <= endDate; date.setDate(date.getDate() + 1)) {
+    for (let date = new Date(startDate), i=0; date <= endDate; date.setDate(date.getDate() + 1), i++) {
         const formattedDate = date.toISOString().split('T')[0];
-        const tab = document.createElement('div');
-        tab.classList.add('tab'); // 탭의 CSS 클래스를 추가
+        const tabNavItem = document.createElement('li');
+        tabNavItem.innerText = formattedDate;
+        tabNavItem.addEventListener('click', function() {
+            curNav=i;
+            showTab(i);
+        });
 
-        const tabLabel = document.createElement('span');
-        tabLabel.textContent = formattedDate;
-        tab.appendChild(tabLabel);
-        tabContainer.appendChild(tab);
+        tabNav.appendChild(tabNavItem);
+
+        const tabContentDiv = document.createElement('div');
+        tabContentDiv.classList.add('tab-content-item');
+        const tabContentItem = document.createElement('ul');
+        tabContentDiv.appendChild(tabContentItem);
+        tabContent.appendChild(tabContentDiv);
     }
 
+    function showTab(index) {
+        const tabContents = document.querySelectorAll('.tab-content-item');
+        tabContents.forEach(content => content.style.display = 'none');
+        tabContents[index].style.display = 'block';
+    }
 
 </script>
 

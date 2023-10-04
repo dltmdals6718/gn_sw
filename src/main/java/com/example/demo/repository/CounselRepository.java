@@ -1,33 +1,14 @@
 package com.example.demo.repository;
 
 import com.example.demo.domain.Counsel;
-import jakarta.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
-@Repository
-@RequiredArgsConstructor
-public class CounselRepository {
-
-  private final EntityManager em;
-
-  public void save(Counsel counsel){
-    em.persist(counsel);
-  }
-
-  public Counsel findOne(Long id){
-    return em.find(Counsel.class, id);
-  }
-  public List<Counsel> findAll(){  //조회된 결과를 반환
-    List<Counsel> result = em.createQuery("select c from Counsel c", Counsel.class).getResultList();
-    return result;
-  }
-
-  public List<Counsel> findByemail(String email){
-    return em.createQuery("select c from Counsel c where c.email = :email", Counsel.class)
-        .setParameter("email",  email).getResultList();
-  }
-
+public interface CounselRepository extends JpaRepository<Counsel, Long> {
+  Page<Counsel> findAll(Pageable pageable);
+  Page<Counsel> findByEmailContaining(String email, Pageable pageable);
+  Long countByEmail(String email);
+  // 특별한 메서드 정의 없이 JpaRepository를 확장하면 기본적인 CRUD(Create, Read, Update, Delete) 기능을 사용할 수 있습니다.
 }
+

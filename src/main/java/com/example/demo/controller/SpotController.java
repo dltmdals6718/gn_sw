@@ -13,18 +13,18 @@ import java.util.List;
 @RestController
 public class SpotController {
 
-    @Autowired
-    private SpotService spotService;
+  @Autowired
+  private SpotService spotService;
 
-    @GetMapping("/spotView")
-    public String viewSpotList(Model model) {
-        try {
-            spotService.DataAndSaveToDB();
-            List<Spot> spots = spotService.getAllSpots();
-            model.addAttribute("spots", spots);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "spotList";
+  @GetMapping("/spotView")
+  public String viewSpotList(Model model) {
+    try {
+      spotService.DataAndSaveToDB();
+      List<Spot> spots = spotService.getAllSpots();
+      model.addAttribute("spots", spots);
+    } catch (IOException e) {
+      e.printStackTrace();
     }
+    return "spotList";
+  }
 }

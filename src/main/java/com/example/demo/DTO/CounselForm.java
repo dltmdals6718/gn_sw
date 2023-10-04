@@ -9,5 +9,4 @@ public class CounselForm {
   private String email;
   private String context;
 
-
 }
